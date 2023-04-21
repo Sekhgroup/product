@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sebakendra Company Form</title>
+  <style>
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+    #sebakendraForm{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    }
+    input[type="text"], input[type="date"], input[type="number"] {
+      width: 200px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+      font-size: 16px;
+    }
+    button[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button[type="submit"]:hover {
+      background-color: #45a049;
+    }
+    .leftinfo{
+    width: 350px;
+    display: flex;
+    padding: 5px;
+    border: 1px solid black;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    align-items: flex-start;
+    }
+    .qr-code {
+    display: flex;
+    width: 100%;
+    margin-top: 20px;
+    justify-content: center;
+    }
+    .qr-code img{
+      width: 120px;
+      height: 120px;
+    }
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #printableForm, #printableForm * {
+        visibility: visible;
+      }
+      #printableForm {
+        position: absolute;
+        left: 0;
+        top: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1 style="text-align: center;">Sebakendra bill print</h1>
+  <form id="sebakendraForm">
+    <label for="productName">Product Name:</label>
+    <input type="text" id="productName" name="productName" required>
+
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" required>
+
+    <label for="address">Address:</label>
+    <input type="text" id="address" name="address" required>
+
+    <label for="mobile">Mobile no.:</label>
+    <input type="text" id="mobile" name="mobile" required>
+
+    <label for="date">Date:</label>
+    <input type="date" id="date" name="date" required>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <div id="printableForm"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator/qrcode.min.js"></script>
+  <script>
+    const form = document.querySelector('#sebakendraForm');
+    const printableForm = document.querySelector('#printableForm');
+
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+
+      const productName = form.elements.productName.value;
+      const price = form.elements.price.value;
+      const address = form.elements.address.value;
+      const mobile = form.elements.mobile.value;
+      const date = form.elements.date.value;
+
+      const qr = qrcode(0, 'L');
+      qr.addData(`Product Name: ${productName}\nPrice: ${price}\nAddress: ${address}\nMobile: ${mobile}\nDate: ${date}`);
+      qr.make();
+      const qrCode = qr.createImgTag(5, 10, 'QR Code');
+
+      printableForm.innerHTML = `
+          <div class="formMother" style="display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;">
+          <h2>Sebakendra</h2>
+            <div class="leftinfo">
+                <p><strong>Product Name:</strong> ${productName}</p>
+                <p><strong>Price:</strong> ${price}</p>
+                <p><strong>Address:</strong> ${address}</p>
+                <p><strong>Mobile:</strong> ${mobile}</p>
+                <p><strong>Date:</strong> ${date}</p>
+                <div class="qr-code">${qrCode}</div>
+              </div>
+            
+         </div>
+        <button type="submit"  onclick="window.print()">Print</button>
+      `;
+    });
+
+    // button.addEventListener('submit', function(){
+      
+    // });
+  </script>
+</body>
+</html>
